@@ -79,8 +79,8 @@ class F2(Sketch):
         
         self._w = w
         self._mu = mu
-        self._sketch = [array(typecode, [0] * w) for i in xrange(mu)]
-        self._hashes = [[MurmurHash() for j in xrange(w)] for i in xrange(mu)]
+        self._sketch = [array(typecode, [0] * w) for i in range(mu)]
+        self._hashes = [[MurmurHash() for j in range(w)] for i in range(mu)]
         self._hash = hash(self) 
 
 
@@ -105,13 +105,13 @@ class F2(Sketch):
                            e.g. an integer
         """
         if not weighted:
-            for i in xrange(self._mu):
-                for j in xrange(self._w):
+            for i in range(self._mu):
+                for j in range(self._w):
                     self._sketch[i][j] += self._hashes[i][j].hash(item) % 2 * 2 - 1
         else:
             itm, wt = item
-            for i in xrange(self._mu):
-                for j in xrange(self._w):
+            for i in range(self._mu):
+                for j in range(self._w):
                     self._sketch[i][j] += (self._hashes[i][j].hash(itm) % 2 * 2 - 1) * wt                                    
 
     def estimate(self):
@@ -123,7 +123,7 @@ class F2(Sketch):
         """
 
         return utils.median([utils.mean( map(lambda x: x**2, self._sketch[i]) )
-                             for i in xrange(self._mu)])
+                             for i in range(self._mu)])
 
 
 
@@ -165,8 +165,8 @@ class F2(Sketch):
         res._mu = self._mu
         res._hash = self._hash
 
-        for i in xrange(self._mu):
-            for j in xrange(self._w):
+        for i in range(self._mu):
+            for j in range(self._w):
                 res._sketch[i][j] += other._sketch[i][j]
 
         return res
@@ -194,9 +194,9 @@ class CountSketch(object):
         """
         self._w = w
         self._mu = mu
-        self._sketch = [array(typecode, [0] * w) for i in xrange(mu)]
-        self._sign = [MurmurHash() for i in xrange(mu)]
-        self._hashes = [MurmurHash() for i in xrange(mu)]
+        self._sketch = [array(typecode, [0] * w) for i in range(mu)]
+        self._sign = [MurmurHash() for i in range(mu)]
+        self._hashes = [MurmurHash() for i in range(mu)]
         self._hash = hash(self) 
 
 
@@ -225,14 +225,14 @@ class CountSketch(object):
         """
         if weighted:
             key, weight = item
-            for i in xrange(self._mu):
+            for i in range(self._mu):
                 # where the item is mapped by the i_th hash
                 pos = self._hashes[i].hash(key) % self._w
                 # increment the bucket
                 sg = (self._sign[i].hash(key) % 2) * 2 - 1
                 self._sketch[i][pos] += weight * sg
         else:
-            for i in xrange(self._mu):
+            for i in range(self._mu):
                 # where the item is mapped by the i_th hash
                 pos = self._hashes[i].hash(item) % self._w
                 # increment the bucket
@@ -251,7 +251,7 @@ class CountSketch(object):
         """
         all_estimators = [(self._sign[i].hash(key) % 2 * 2 - 1) * 
                           self._sketch[i][self._hashes[i].hash(key) % self._w]
-                          for i in xrange(self._mu)]
+                          for i in range(self._mu)]
         return utils.median(all_estimators)
 
 
@@ -295,8 +295,8 @@ class CountSketch(object):
         res._mu = self._mu
         res._hash = self._hash
 
-        for i in xrange(self._mu):
-            for j in xrange(self._w):
+        for i in range(self._mu):
+            for j in range(self._w):
                 res._sketch[i][j] += other._sketch[i][j]
 
         return res
@@ -329,8 +329,8 @@ class CountMin(Sketch):
         """
         self._w = w
         self._mu = mu
-        self._sketch = [array(typecode, [0] * w) for i in xrange(mu)]
-        self._hashes = [MurmurHash() for i in xrange(mu)]
+        self._sketch = [array(typecode, [0] * w) for i in range(mu)]
+        self._hashes = [MurmurHash() for i in range(mu)]
         self._hash = hash(self) 
 
     def processBatch(self, dataStream, weighted=False):
@@ -358,13 +358,13 @@ class CountMin(Sketch):
         """
         if weighted:
             key, weight = item
-            for i in xrange(self._mu):
+            for i in range(self._mu):
                 # where the item is mapped by the i_th hash
                 pos = self._hashes[i].hash(key) % self._w
                 # increment the bucket
                 self._sketch[i][pos] += weight            
         else:
-            for i in xrange(self._mu):
+            for i in range(self._mu):
                 # where the item is mapped by the i_th hash
                 pos = self._hashes[i].hash(item) % self._w
                 # increment the bucket
@@ -381,7 +381,7 @@ class CountMin(Sketch):
         :rtype: int/real
         """
         all_estimators = [self._sketch[i][self._hashes[i].hash(key) % self._w]
-                          for i in xrange(self._mu)]
+                          for i in range(self._mu)]
         return min(all_estimators)
 
 
@@ -424,8 +424,8 @@ class CountMin(Sketch):
         res._hashes = copy.deepcopy(self._hashes)
         res._w = self._w
         res._mu = self._mu
-        for i in xrange(self._mu):
-            for j in xrange(self._w):
+        for i in range(self._mu):
+            for j in range(self._w):
                 res._sketch[i][j] += other._sketch[i][j]
 
         return res
@@ -490,7 +490,7 @@ class CountMedian(CountMin):
         :rtype: int/real
         """
         all_estimators = [self._sketch[i][self._hashes[i].hash(key) % self._w]
-                          for i in xrange(self._mu)]
+                          for i in range(self._mu)]
         return utils.median(all_estimators)
 
 

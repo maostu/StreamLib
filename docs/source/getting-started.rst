@@ -39,7 +39,7 @@ Count-Min sketch [cm05]_ is used to summarize the data stream and estimate the f
     from streamlib import CountMin
     cm = CountMin() # create a instance of CountMin, see document for more detail
     cm.processBatch([0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 3, 3, 4])
-    for i in xrange(5):
+    for i in range(5):
 	print 'Estimated frequency of', i, 'is', cm.estimate(i)
 
 result of above code, ::
@@ -64,7 +64,7 @@ By merging those instances, we obtain a summary of the joint stream of all subst
     cm0.processBatch([0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 3, 3, 4])
     cm1.processBatch([1, 2, 3, 4])
     cm = cm0.merge(cm1)
-    for i in xrange(5):
+    for i in range(5):
 	print 'Estimated frequency of', i, 'is', cm.estimate(i)
 
 which gives, ::
@@ -86,7 +86,7 @@ the following case,
     dataStream = [(0, 20), (1, 4), (2, 1), (3, 1), (4, 5), (1, 100), (0, 500)]
     cm.processBatch(dataStream, weighted=True) # set weighted=True
 
-    for i in xrange(5):
+    for i in range(5):
 	print 'Estimated frequency of', i, 'is', cm.estimate(i)
 
 it gives ::
