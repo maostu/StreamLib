@@ -1,4 +1,4 @@
-
+from functools import reduce
 
 
 
@@ -9,11 +9,8 @@ def median(numbers):
     return (st[l // 2] + st[(l - 1) // 2]) / 2
 
 def mean(numbers):
-    if len(numbers) == 0:
-        return 0
-    else:
-        return sum(numbers) / len(numbers)
-
+    [sum, count] = reduce(lambda aggr, elem: (aggr[0] + elem, aggr[1]+1), numbers, (0.0,0))
+    return sum / max(count, 1)
 
 
 from functools import wraps
